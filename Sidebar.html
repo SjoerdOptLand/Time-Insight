@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html><body>
+
+<!-- Use a templated HTML printing scriptlet to import common stylesheet. -->
+<?!= HtmlService.createHtmlOutputFromFile('Stylesheet').getContent(); ?>
+
+<!-- Below is the HTML code that defines the sidebar element structure. -->
+<div class="sidebar branding-below">
+  <p>
+  Time Insight calculates the total time spent on different projects, as labeled with hashtags.
+  </p>
+  
+  <!-- experimental -->
+<script>
+var openDropdownTimeout;
+
+function mouseDown() {
+  openDropdownTimeout = setTimeout(openDropdown, 400);
+}
+
+function startSince(minutesAgo) {
+ onStartSince(minutesAgo);
+ closeDropDown();
+}
+
+function openDropdown() {
+  document.getElementById("myDropdown").classList.add("show");
+}
+
+function closeDropDown() {
+  window.clearTimeout(openDropdownTimeout);
+  document.getElementById("myDropdown").classList.remove("show");
+}
+
+
+</script>
+<!-- /experimental -->
+  
+  
+  <hr/>
+
+  <div class="block" id="sidebar-start-bar" style="z-index: +1">
+    <div style="display: inline-block">
+      <button id="sidebar-start-button" title="Ctrl+D, hover to grab selected tag" onmousedown="mouseDown()" onmouseup="startSince(0)">Start</button>
+      <div id="myDropdown" class="dropdown-content" onmouseleave="closeDropDown()">
+        <a onmouseup="startSince(5)">5 minutes ago</a>
+        <a onmouseup="startSince(10)">10 minutes ago</a>
+        <a onmouseup="startSince(30)">30 minutes ago</a>
+        <a onmouseup="startSince(60)">1 hour ago</a>
+        <a onmouseup="startSince(120)">2 hours ago</a>
+      </div>
+    </div>
+    <input id="sidebar-tag-field"/>
+  </div>
+  <div class="block" style="z-index: -1" id="sidebar-stop-bar">
+    <button id="sidebar-stop-button" title="Ctrl+E">Stop</button>
+  </div>
+
+  
+  <hr/>
+  
+  <div class="block">
+    <button id="sidebar-update-button">Update sheet</button>
+  </div>
+  
+  <div id="sidebar-status"></div>
+  
+</div>
+
+<!-- Enter sidebar bottom-branding below. -->
+<div class="sidebar bottom">
+  <img alt="Add-on logo" class="logo" width="25"
+      src="https://googledrive.com/host/0B0G1UdyJGrY6XzdjQWF4a1JYY1k/apps-script_2x.png">
+  <span class="gray branding-text">Time Insight by Sjoerd Op 't Land, ESEO</span>
+</div>
+
+<!-- Use a templated HTML printing scriptlet to import JavaScript. -->
+<?!= HtmlService.createHtmlOutputFromFile('SidebarJavaScript').getContent(); ?>
+
+
+</body></html>

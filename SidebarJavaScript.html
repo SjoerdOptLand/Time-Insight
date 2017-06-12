@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html><body>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<script>
+  /**
+   * Run initializations on sidebar load.
+   */
+  var runningTagCache = "";
+  
+  //experimental
+
+  ///
+  
+  
+  
+  $(function() {
+    // Assign handler functions to sidebar elements here, if needed.
+    $('#sidebar-stop-button').click(onStopClick);
+    $('#sidebar-start-button').mouseover(onStartMouseOver);
+    $('#sidebar-update-button').click(onUpdateSheetClick);
+
+  $(document).keydown(function(e){
+    if(e.ctrlKey){
+      //console.log("pressed a key");
+      //console.log(e);      
+      if(e.keyCode == 68) {
+        onStartClick();
+      }
+      if(e.keyCode == 69) {
+        onStopClick();
+      }
+    }
+  });
+
+    // Call the server here to retrieve any information needed to build
+    // the dialog, if necessary.
+    updateRunningView();
+  });
+
+  function onUpdateSheetClick() {
+    // Gather any information that needs to be sent to the server here.
+    showStatus('Updating current sheet...');
+    // Send the value to the server and handle the response.
+    google.script.run
+         .withSuccessHandler(
+          function(msg, element) {
+            showStatus('');
+            element.disabled = false;
+          })
+        .withFailureHandler(
+          function(msg, element) {
+            // Respond to failure conditions here.
+            showStatus(msg, 'error');
+            element.disabled = false;
+          })
+        .withUserObject(this)
+        .updateCurrentSheet();
+        
+     
+  }
+
+  function onStopClick() {
+    // Gather any information that needs to be sent to the server here.
+
+    // Send the value to the server and handle the response.
+    google.script.run
+         .withSuccessHandler(
+          function(msg, element) {
+            showStatus('');
+            element.disabled = false;
+            
+            updateRunningView();
+          })
+        .withFailureHandler(
+          function(msg, element) {
+            // Respond to failure conditions here.
+            showStatus(msg, 'error');
+            element.disabled = false;
+
+          })
+        .withUserObject(this)
+        .stopRunningTag();
+        
+     
+  }
+
+  function onStartSince(minutesAgo) {
+    // Send the value to the server and handle the response.
+    google.script.run
+         .withSuccessHandler(
+          function(msg, element) {
+            showStatus('');
+            element.disabled = false;
+            
+            $('#sidebar-tag-field').val('');
+            updateRunningView();
+          })
+        .withFailureHandler(
+          function(msg, element) {
+            // Respond to failure conditions here.
+            showStatus(msg, 'error');
+            element.disabled = false;
+
+          })
+        .withUserObject(this)
+        .startTag($('#sidebar-tag-field').val(),minutesAgo);
+
+    
+}
+
+  function onStartMouseOver() {
+    if (!$('#sidebar-tag-field').val()) {
+       google.script.run
+         .withSuccessHandler(
+          function(msg, element) {
+            showStatus('');
+            element.disabled = false;
+            
+            if (runningTagCache !== msg) {
+              $('#sidebar-tag-field').val(msg);
+            }
+          })
+        .withFailureHandler(
+          function(msg, element) {
+            // Respond to failure conditions here.
+            showStatus(msg, 'error');
+            element.disabled = false;
+          })
+        .withUserObject(this)
+        .getSelectedTag();
+     }
+    
+}
+
+   function updateRunningView() {
+        google.script.run
+         .withSuccessHandler(
+          function(msg, element) {
+            showRunningTag(msg);
+            runningTagCache = msg;
+            showStatus('');
+            element.disabled = false;
+            
+            $('#sidebar-stop-button').prop('disabled', !msg);
+            
+            if(msg) {
+              $('#sidebar-start-button').html('Switch to');
+            } else {
+              $('#sidebar-start-button').html('Start');
+            }
+
+            onUpdateSheetClick();
+          })
+        .withFailureHandler(
+          function(msg, element) {
+            // Respond to failure conditions here.
+            showStatus(msg, 'error');
+            element.disabled = false;
+          })
+        .withUserObject(this)
+        .getRunningTag();
+   }
+
+
+  function showRunningTag(msg) {
+    $('#sidebar-stop-button').html('Stop '+msg);
+  }
+
+
+/**
+   * Displays the given status message in the sidebar.
+   *
+   * @param {String} msg The status message to display.
+   * @param {String} classId The message type (class id) that the message
+   *   should be displayed as.
+   */
+function showStatus(msg, classId) {
+    $('#sidebar-status').removeClass().html(msg);
+    if (classId) {
+      $('#sidebar-status').addClass(classId);
+    }
+  }
+
+</script>
+
+</body></html>
