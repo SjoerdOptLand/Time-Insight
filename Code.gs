@@ -2,8 +2,7 @@
  * @OnlyCurrentDoc  Limits the script to only accessing the current spreadsheet.
  */
 
-var DIALOG_TITLE = 'Example Dialog';
-var SIDEBAR_TITLE = 'Time Insight';
+var SIDEBAR_TITLE = 'Punch Clock';
 
 
 
@@ -15,12 +14,18 @@ var SIDEBAR_TITLE = 'Time Insight';
 function onOpen(e) {
   SpreadsheetApp.getUi()
       .createAddonMenu()
-      .addItem('Create example sheet', 'createExampleSheet')
       .addItem('Update current sheet', 'updateCurrentSheet')
-      .addItem('Show clocking sidebar', 'showSidebar')
+      .addItem('Open punch clock sidebar', 'showSidebar')
+      .addSeparator()
+      .addSubMenu(SpreadsheetApp.getUi().createMenu('Use template')
+           .addItem('Monthly time sheet', 'createExampleSheet')
+           .addItem('Weekly time sheet', 'createExampleSheet')
+           .addItem('Daily time sheet', 'createExampleSheet')
+      )
+      .addItem('Settings...', 'openSettings')  
       .addToUi();
   
-  showSidebar();
+  applyAutoShowSidebar();
 }
 
 /**
@@ -30,6 +35,9 @@ function onOpen(e) {
  * @param {Object} e The event parameter for a simple onInstall trigger.
  */
 function onInstall(e) {
+  initialiseSettings();
+  
+  
   onOpen(e);
 }
 
@@ -109,41 +117,7 @@ function simplify(amounts, aliases) {
   return simplifiedDictionary;
 }
 
-/**
- * Replaces the active cell value with the given value.
- *
- * @param {Number} value A reference number to replace with.
- */
-function setActiveValue(value) {
-  // Use data collected from sidebar to manipulate the sheet.
-  //var cell = tagSheet().getActiveCell();
-  //cell.setValue('Hoi');
-  
-  //hashTotals = thisYearsTotals();
-  //aliases = readInDictionary('Alias Calendrier');
-  //writeOutDictionary(simplify(hashTotals,aliases));
-  updateCurrentSheet();
-}
 
-
-/**
- * Executes the specified action (create a new sheet, copy the active sheet, or
- * clear the current sheet).
- *
- * @param {String} action An identifier for the action to take.
- */
-function modifySheets(action) {
-  // Use data collected from dialog to manipulate the spreadsheet.
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var currentSheet = ss.getActiveSheet();
-  if (action === "create") {
-    ss.insertSheet();
-  } else if (action === "copy") {
-    currentSheet.copyTo(ss);
-  } else if (action === "clear") {
-    currentSheet.clear();
-  }
-}
 
 //http://stackoverflow.com/questions/966225/how-can-i-create-a-two-dimensional-array-in-javascript/966938#966938
 function createArray(length) {

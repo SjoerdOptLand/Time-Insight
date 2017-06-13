@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+  </head>
+  <body onLoad="loadSettings()">
+    <!-- Use a templated HTML printing scriptlet to import common stylesheet. -->
+    <?!= HtmlService.createHtmlOutputFromFile('Stylesheet').getContent(); ?>
+    <?!= HtmlService.createHtmlOutputFromFile('UIJavaScript').getContent(); ?>
+    
+    <script>
+      function loadSettings() {
+        showStatus('Loading settings..');
+        google.script.run
+        .withFailureHandler(
+          function(msg, element) {
+            showStatus(msg, 'error');
+          })
+        .withSuccessHandler(
+          function(settings) {
+            showStatus('');
+            document.getElementById('autoShowSidebar').checked = settings;
+          })
+        .getAutoShowSidebar();
+      }
+    
+      function saveSettings() {
+        showStatus('Saving settings..');
+        google.script.run
+        .withFailureHandler(
+          function(msg, element) {
+            showStatus(msg, 'error');
+          })
+        .withSuccessHandler(
+          function(msg, element) {
+            showStatus(msg);
+            google.script.host.close();
+          })
+        .saveSettings(document.getElementById('autoShowSidebar').checked)
+      }
+    
+    </script>
+    <div>
+      <p>Calendar:</p>
+      <p><input type="checkbox" id="autoShowSidebar"><label for="autoShowSidebar">Always open punch clock sidebar</label></p>
+      <input type="button" value="Close without saving" onclick="google.script.host.close()" />
+      <input type="button" class="action" value="Save settings" onclick="saveSettings()" />
+      <div id="status"></div>
+    </div>
+    
+    
+
+  </body>
+</html>
+
+

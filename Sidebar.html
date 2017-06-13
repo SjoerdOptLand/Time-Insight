@@ -3,13 +3,11 @@
 
 <!-- Use a templated HTML printing scriptlet to import common stylesheet. -->
 <?!= HtmlService.createHtmlOutputFromFile('Stylesheet').getContent(); ?>
+<?!= HtmlService.createHtmlOutputFromFile('UIJavaScript').getContent(); ?>
 
 <!-- Below is the HTML code that defines the sidebar element structure. -->
 <div class="sidebar branding-below">
-  <p>
-  Time Insight calculates the total time spent on different projects, as labeled with hashtags.
-  </p>
-  
+    
   <!-- experimental -->
 <script>
 var openDropdownTimeout;
@@ -37,7 +35,6 @@ function closeDropDown() {
 <!-- /experimental -->
   
   
-  <hr/>
 
   <div class="block" id="sidebar-start-bar" style="z-index: +1">
     <div style="display: inline-block">
@@ -60,17 +57,15 @@ function closeDropDown() {
   <hr/>
   
   <div class="block">
-    <button id="sidebar-update-button">Update sheet</button>
+    <button id="sidebar-update-button">Update current sheet</button>
   </div>
   
-  <div id="sidebar-status"></div>
+  <div id="status"></div>
   
 </div>
 
 <!-- Enter sidebar bottom-branding below. -->
 <div class="sidebar bottom">
-  <img alt="Add-on logo" class="logo" width="25"
-      src="https://googledrive.com/host/0B0G1UdyJGrY6XzdjQWF4a1JYY1k/apps-script_2x.png">
   <span class="gray branding-text">Time Insight by Sjoerd Op 't Land, ESEO</span>
 </div>
 

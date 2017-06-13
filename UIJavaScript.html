@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html><body>
+<!-- JQuery essential to make $() references work -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> 
+
+<script>
+ 
+/**
+   * Displays the given status message in the sidebar.
+   *
+   * @param {String} msg The status message to display.
+   * @param {String} classId The message type (class id) that the message
+   *   should be displayed as.
+   */
+function showStatus(msg, classId) {
+    $('#status').removeClass().html(msg);
+    if (classId) {
+      $('#status').addClass(classId);
+    }
+  }
+  
+  
+</script></body></html>
+
+
