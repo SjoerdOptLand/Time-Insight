@@ -15,17 +15,21 @@ function onOpen(e) {
   SpreadsheetApp.getUi()
       .createAddonMenu()
       .addItem('Update current sheet', 'updateCurrentSheet')
-      .addItem('Open punch clock sidebar', 'showSidebar')
+      .addItem('Open punch clock', 'showSidebar')
       .addSeparator()
       .addSubMenu(SpreadsheetApp.getUi().createMenu('Use template')
-           .addItem('Monthly time sheet', 'createExampleSheet')
-           .addItem('Weekly time sheet', 'createExampleSheet')
-           .addItem('Daily time sheet', 'createExampleSheet')
+           //.addItem('Monthly time sheet', 'createExampleSheet')
+           .addItem('Weekly time sheet', 'createWeekExampleSheet')
+           //.addItem('Daily time sheet', 'createExampleSheet')
       )
       .addItem('Settings...', 'openSettings')  
       .addToUi();
   
-  applySettings();
+  if (e && e.authMode == ScriptApp.AuthMode.NONE) {
+    SpreadsheetApp.getUi().alert("You are opening a document that requires Time Insight to be installed. Install it from the Add-on menu.");
+  } else {                                 
+    applySettings();
+  }
 }
 
 /**

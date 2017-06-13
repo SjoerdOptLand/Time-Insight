@@ -62,9 +62,11 @@
     <div>
       <p><label for="clockingCalendar">Extract from and punch into calendar:</label><br/>
       <select id="clockingCalendar"></select></p>
-      <p><input type="checkbox" id="autoShowSidebar"><label for="autoShowSidebar">Always open punch clock sidebar</label></p>
-      <input type="button" value="Close without saving" onclick="google.script.host.close()" />
-      <input type="button" class="action" value="Save settings" onclick="saveSettings()" />
+      <p><input type="checkbox" id="autoShowSidebar"><label for="autoShowSidebar">Always open punch clock</label></p>
+      <br/>
+      <br/>
+      <input type="button" class="action" value="Save" onclick="saveSettings()" />
+      <input type="button" value="Cancel" onclick="google.script.host.close()" />
       <div id="status"></div>
     </div>
     

@@ -90,3 +90,16 @@ function listKeys(theDictionary) {
   }
   return keyList;
 }
+
+function findNonExistingSheetName(nameProposal) {
+  spreadSheet = SpreadsheetApp.getActiveSpreadsheet();
+  sheetNames = [];
+  spreadSheet.getSheets().forEach( function(sheet) {
+    sheetNames.push(sheet.getName());
+  });
+  tryProposal = nameProposal;
+  for (copyNumber = 1; sheetNames.contains(tryProposal); copyNumber++) {
+    tryProposal = nameProposal + ' ' + copyNumber;
+  }
+  return tryProposal;
+}
