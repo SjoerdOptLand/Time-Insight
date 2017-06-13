@@ -1,5 +1,11 @@
 function initialiseSettings() {
   setAutoShowSidebar('false');
+  setClockingCalendar(getPrimaryUserCalendar());
+}
+
+function test() {
+  var returnValue = getPrimaryUserCalendar();
+  Logger.log(returnValue);
 }
 
 function openSettings() {
@@ -10,8 +16,29 @@ function openSettings() {
   SpreadsheetApp.getUi().showModalDialog(html, 'Time Insight settings');
 }
 
-function saveSettings(autoShowSidebar) {
-  setAutoShowSidebar(autoShowSidebar);
+function loadSettings() {
+  return { 
+    autoShowSidebar:  getAutoShowSidebar(),
+    clockingCalendar: getClockingCalendar(),
+    allCalendars:     getAllCalendars(true) // not so beautiful to communicate this here...
+  };
+}
+
+function saveSettings(settings) {
+  setAutoShowSidebar(settings['autoShowSidebar']);
+  setClockingCalendar(settings['clockingCalendar']);
+}
+
+function applySettings()
+{
+  applyAutoShowSidebar();
+  applyClockingCalendar();
+}
+
+// AUTO_SHOW_SIDEBAR
+function getAutoShowSidebar() {
+  var documentProperties = PropertiesService.getDocumentProperties();
+  return documentProperties.getProperty('AUTO_SHOW_SIDEBAR') == 'true';
 }
 
 function setAutoShowSidebar(autoShowSidebar) {
@@ -21,18 +48,29 @@ function setAutoShowSidebar(autoShowSidebar) {
   applyAutoShowSidebar();
 }
 
-function getAutoShowSidebar() {
-  var documentProperties = PropertiesService.getDocumentProperties();
-  return documentProperties.getProperty('AUTO_SHOW_SIDEBAR') == 'true';
-}
-
 function applyAutoShowSidebar() {
   if (getAutoShowSidebar()) {
     showSidebar();
   }
 }
+
+// CLOCKING_CALENDAR
+function getClockingCalendar() {
+  var documentProperties = PropertiesService.getDocumentProperties();
+  return documentProperties.getProperty('CLOCKING_CALENDAR');
+}
+
+function setClockingCalendar(clockingCalendar) {
+  var documentProperties = PropertiesService.getDocumentProperties();
+  documentProperties.setProperty('CLOCKING_CALENDAR', clockingCalendar);
   
-function test() {
-  var returnValue = getAutoShowSidebar();
-  Logger.log();
+  applyClockingCalendar();
+}
+
+function applyClockingCalendar() {
+  updateCurrentSheet();
+}
+
+function calendarIds() {
+  return[getClockingCalendar()];
 }

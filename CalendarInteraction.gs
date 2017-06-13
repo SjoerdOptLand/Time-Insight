@@ -14,22 +14,47 @@ function thisMonthsTotals() {
   return hashTotalsInPeriod(startOfThisMonth,endOfThisMonth);
 }
 
-function getAllCalendarNames() { //TODO: refer to calendars by ID, because names may be duplicate
-  calendarNames = [];
+function getAllCalendarIds() { //TODO: refer to calendars by ID, because names may be duplicate
+  calendarIds = [];
   CalendarApp.getAllCalendars().forEach( function(calendar) {
-    calendarNames.push(calendar.getName());
+    calendarIds.push(calendar.getId());
   });
-  return calendarNames;
+  return calendarIds;
 }
 
+function getAllCalendars(editable) {
+  var allCalendars = {};
+  var test = {};
+  if (editable) {
+    var calendars = CalendarApp.getAllOwnedCalendars();
+  } else {
+    var calendars = CalendarApp.getAllCalendars();
+  }
+  calendars.forEach( function(calendar) {
+    allCalendars[calendar.getId()] = calendar.getName();
+    test[calendar.getId()] = calendar.isMyPrimaryCalendar();
+  });
+  return allCalendars;
+}
 
-function getAllEvents(calendarNames, period) {
+function getPrimaryUserCalendar() {
+  var primaryCalendar = CalendarApp.getAllOwnedCalendars().find( function(calendar) {
+    return calendar.isMyPrimaryCalendar()
+  });
+  if (primaryCalendar) {
+    return primaryCalendar.getId();
+  } else {
+    throw new Error("No primary calendar found. Please create at least one Google Calendar.");
+  }
+}
+
+function getAllEvents(calendarIds, period) {
   var startTime = period[0];
   var endTime = period[1];
   
   var allEvents = [];
-  calendarNames.forEach( function(calendarName) {
-    var calendar = CalendarApp.getCalendarsByName(calendarName)[0];
+  calendarIds.forEach( function(calendarId) {
+    var calendar = CalendarApp.getCalendarById(calendarId);
     allEvents = allEvents.concat(calendar.getEvents(startTime,endTime));
     //Utilities.sleep(1000);
   });

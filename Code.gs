@@ -25,7 +25,7 @@ function onOpen(e) {
       .addItem('Settings...', 'openSettings')  
       .addToUi();
   
-  applyAutoShowSidebar();
+  applySettings();
 }
 
 /**
@@ -76,7 +76,7 @@ function updateCurrentSheet() {
   periods = getPeriods();
   
   totalPeriod = [periods[0][0],periods[periods.length-1][1]];
-  allEvents = getAllEvents(calendarNames(), totalPeriod);
+  allEvents = getAllEvents(calendarIds(), totalPeriod);
   newHashTags = listKeys(hashTotalsInPeriod(allEvents,totalPeriod));
   
   newTagGroups = mergeTags(splitTagStrings(getActualTagStrings()),newHashTags);

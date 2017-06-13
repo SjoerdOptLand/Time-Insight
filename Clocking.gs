@@ -44,6 +44,6 @@ function stopRunningTag() {
 }
 
 function storeActivity(activityTag,activityStart,activityStop) {
-  var calendar = CalendarApp.getCalendarsByName(calendarNames()[0])[0];  
+  var calendar = CalendarApp.getCalendarById(getClockingCalendar());  
   calendar.createEvent(activityTag,activityStart,activityStop);
 }
