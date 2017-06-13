@@ -18,18 +18,18 @@
     $('#sidebar-start-button').mouseover(onStartMouseOver);
     $('#sidebar-update-button').click(onUpdateSheetClick);
 
-  $(document).keydown(function(e){
-    if(e.ctrlKey){
-      //console.log("pressed a key");
-      //console.log(e);      
-      if(e.keyCode == 68) {
-        onStartClick();
+    $(document).keydown(function(e){
+      if(e.ctrlKey){
+        //console.log("pressed a key");
+        //console.log(e);      
+        if(e.keyCode == 68) {
+          onStartClick();
+        }
+        if(e.keyCode == 69) {
+          onStopClick();
+        }
       }
-      if(e.keyCode == 69) {
-        onStopClick();
-      }
-    }
-  });
+    });
 
     // Call the server here to retrieve any information needed to build
     // the dialog, if necessary.
@@ -48,20 +48,14 @@
           })
         .withFailureHandler(
           function(msg, element) {
-            // Respond to failure conditions here.
             showStatus(msg, 'error');
             element.disabled = false;
           })
         .withUserObject(this)
         .updateCurrentSheet();
-        
-     
   }
 
   function onStopClick() {
-    // Gather any information that needs to be sent to the server here.
-
-    // Send the value to the server and handle the response.
     google.script.run
          .withSuccessHandler(
           function(msg, element) {
@@ -72,19 +66,15 @@
           })
         .withFailureHandler(
           function(msg, element) {
-            // Respond to failure conditions here.
             showStatus(msg, 'error');
             element.disabled = false;
 
           })
         .withUserObject(this)
-        .stopRunningTag();
-        
-     
+        .stopRunningTag();    
   }
 
   function onStartSince(minutesAgo) {
-    // Send the value to the server and handle the response.
     google.script.run
          .withSuccessHandler(
           function(msg, element) {
@@ -96,16 +86,13 @@
           })
         .withFailureHandler(
           function(msg, element) {
-            // Respond to failure conditions here.
             showStatus(msg, 'error');
             element.disabled = false;
 
           })
         .withUserObject(this)
-        .startTag($('#sidebar-tag-field').val(),minutesAgo);
-
-    
-}
+        .startTag($('#sidebar-tag-field').val(),minutesAgo); 
+  }
 
   function onStartMouseOver() {
     if (!$('#sidebar-tag-field').val()) {
@@ -121,7 +108,6 @@
           })
         .withFailureHandler(
           function(msg, element) {
-            // Respond to failure conditions here.
             showStatus(msg, 'error');
             element.disabled = false;
           })

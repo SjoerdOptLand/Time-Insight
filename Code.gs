@@ -55,17 +55,18 @@ function showSidebar() {
 
 
 function getSelectedTag() {
-  // Retrieve and return the information requested by the sidebar.
   var selectedValue = tagSheet().getActiveCell().getValue();
   
   if (selectedValue) {
-    var firstTag = splitTags(selectedValue)[0];
-  
-    if (firstTag[0] !== "#") {
-      throw new Error("Tag must start with a # ('"+firstTag+"' does not)");
+    try {
+      var firstTag = splitTags(selectedValue)[0];
+      if (firstTag[0] !== "#") {
+        throw new Error("Tag must start with a # ('"+firstTag+"' does not)");
+      }
+      return firstTag;
+    } catch (exception) {
+      return '';
     }
-
-    return firstTag;
   }
 }
 
